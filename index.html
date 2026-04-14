@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STP Control Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">STP monitoring</p>
+          <h1>Control dashboard for paired inlet and outlet sewage parameters</h1>
+          <p class="subtitle">
+            Track inlet and outlet values for COD, BOD, TSS, TDS, pH, nitrate,
+            and fecal coliform, compare them against the acceptable range, and
+            trigger mandatory enforcement laws when limits are exceeded.
+          </p>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card__label">Current plant state</div>
+          <div id="plant-state" class="hero-card__state">Normal</div>
+          <div id="plant-message" class="hero-card__message"></div>
+          <div id="sync-status" class="sync-status">Live sync idle</div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel">
+          <div class="panel__header">
+            <h2>Dashboard</h2>
+            <p>Latest paired inlet/outlet readings and compliance status</p>
+          </div>
+          <div id="summary-grid" class="summary-grid"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Inlet</th>
+                  <th>Outlet</th>
+                  <th>Limit</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="parameter-table"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel__header">
+            <h2>Add Reading</h2>
+            <p>Manual override for testing only. Live data should come from Google Sheets.</p>
+          </div>
+          <form id="reading-form" class="form">
+            <label>
+              COD inlet (mg/L)
+              <input name="cod_inlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              COD outlet (mg/L)
+              <input name="cod_outlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              BOD inlet (mg/L)
+              <input name="bod_inlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              BOD outlet (mg/L)
+              <input name="bod_outlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              TSS inlet (mg/L)
+              <input name="tss_inlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              TSS outlet (mg/L)
+              <input name="tss_outlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              TDS inlet (mg/L)
+              <input name="tds_inlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              TDS outlet (mg/L)
+              <input name="tds_outlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              pH inlet
+              <input name="ph_inlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              pH outlet
+              <input name="ph_outlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              Nitrite + Nitrate inlet (mg/L)
+              <input name="nitrate_inlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              Nitrite + Nitrate outlet (mg/L)
+              <input name="nitrate_outlet" type="number" step="0.01" required />
+            </label>
+            <label>
+              Fecal coliform inlet
+              <input name="fecal_inlet" type="number" step="1" required />
+            </label>
+            <label>
+              Fecal coliform outlet
+              <input name="fecal_outlet" type="number" step="1" required />
+            </label>
+            <button type="submit">Update dashboard</button>
+          </form>
+        </section>
+      </main>
+
+      <section class="panel panel--wide">
+        <div class="panel__header">
+          <h2>Flow Diagram</h2>
+          <p>Inlet and outlet thickness scale to the limit; breached areas turn red</p>
+        </div>
+        <div id="flow-diagram" class="flow-diagram"></div>
+      </section>
+
+      <section class="panel panel--wide">
+          <div class="panel__header">
+            <h2>Operational Rules</h2>
+            <p>Mandatory enforcement laws based on paired inlet/outlet readings</p>
+          </div>
+        <div class="rules">
+          <article>
+            <h3>Law 01: Solid dilution mandate</h3>
+            <p>
+              If TSS or related solids rise above the acceptable limit, treated
+              water must be pumped back into the system until compliance is
+              restored.
+            </p>
+          </article>
+          <article>
+            <h3>Law 02 / 03: Residence time stop</h3>
+            <p>
+              If BOD or COD exceed the limit, inflow must be stopped and the
+              plant must remain on hold until microbial degradation restores the
+              readings.
+            </p>
+          </article>
+          <article>
+            <h3>Law 04 / 05 / 06 / 07: Chemical and hygiene control</h3>
+            <p>
+              pH, nitrate, TDS, and fecal coliform deviations trigger mandatory
+              correction, discharge hold, or disinfection escalation before the
+              system can resume.
+            </p>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
